@@ -1,0 +1,53 @@
+{
+  "last_updated": "2026-11-26 00:00 HKT",
+  "events": [
+    {
+      "id": "hk-rg-2026",
+      "region": "香港",
+      "category": "同人即賣會",
+      "title": "Rainbow Gala 同人誌即賣會（範例資料）",
+      "start_date": "2026-12-20",
+      "end_date": "2026-12-20",
+      "venue": "亞洲國際博覽館",
+      "deadline_note": "預售門票熱賣中",
+      "tags": ["同人誌", "Cosplay", "可現場購票"],
+      "url": "https://www.doujinark.hk/"
+    },
+    {
+      "id": "sz-comic-2026",
+      "region": "深圳",
+      "category": "綜合漫展",
+      "title": "深圳國際電玩節暨動漫展（範例資料）",
+      "start_date": "2026-12-26",
+      "end_date": "2026-12-27",
+      "venue": "深圳會展中心（福田）",
+      "deadline_note": "開展前 3 日停止早鳥票",
+      "tags": ["需實名購票", "福田口岸直達", "大型漫展"],
+      "url": "https://show.bilibili.com/"
+    },
+    {
+      "id": "tw-cwt-2026",
+      "region": "台灣",
+      "category": "同人即賣會",
+      "title": "CWT 台灣同人誌販售會（範例資料）",
+      "start_date": "2026-12-12",
+      "end_date": "2026-12-13",
+      "venue": "國立臺灣大學綜合體育館",
+      "deadline_note": "社團入場證已寄發",
+      "tags": ["同人場", "台北", "兩日場"],
+      "url": "https://www.comicworld.com.tw/"
+    },
+    {
+      "id": "mo-acg-2026",
+      "region": "澳門",
+      "category": "遊戲與快閃",
+      "title": "澳門動漫遊戲嘉年華（範例資料）",
+      "start_date": "2026-12-19",
+      "end_date": "2026-12-20",
+      "venue": "澳門旅遊塔會展娛樂中心",
+      "deadline_note": "免費入場／部分舞台需預約",
+      "tags": ["澳門", "遊戲試玩", "週末好去處"],
+      "url": "https://www.macautower.com.mo/"
+    }
+  ]
+}
