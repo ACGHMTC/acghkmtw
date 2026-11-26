@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-26 00:00 HKT",
+  "last_updated": "2026-11-27 00:59 HKT",
   "events": [
     {
       "id": "hk-rg-2026",
@@ -10,7 +10,11 @@
       "end_date": "2026-12-20",
       "venue": "亞洲國際博覽館",
       "deadline_note": "預售門票熱賣中",
-      "tags": ["同人誌", "Cosplay", "可現場購票"],
+      "tags": [
+        "同人誌",
+        "Cosplay",
+        "可現場購票"
+      ],
       "url": "https://www.doujinark.hk/"
     },
     {
@@ -22,7 +26,11 @@
       "end_date": "2026-12-27",
       "venue": "深圳會展中心（福田）",
       "deadline_note": "開展前 3 日停止早鳥票",
-      "tags": ["需實名購票", "福田口岸直達", "大型漫展"],
+      "tags": [
+        "需實名購票",
+        "福田口岸直達",
+        "大型漫展"
+      ],
       "url": "https://show.bilibili.com/"
     },
     {
@@ -34,7 +42,11 @@
       "end_date": "2026-12-13",
       "venue": "國立臺灣大學綜合體育館",
       "deadline_note": "社團入場證已寄發",
-      "tags": ["同人場", "台北", "兩日場"],
+      "tags": [
+        "同人場",
+        "台北",
+        "兩日場"
+      ],
       "url": "https://www.comicworld.com.tw/"
     },
     {
@@ -46,7 +58,11 @@
       "end_date": "2026-12-20",
       "venue": "澳門旅遊塔會展娛樂中心",
       "deadline_note": "免費入場／部分舞台需預約",
-      "tags": ["澳門", "遊戲試玩", "週末好去處"],
+      "tags": [
+        "澳門",
+        "遊戲試玩",
+        "週末好去處"
+      ],
       "url": "https://www.macautower.com.mo/"
     }
   ]
