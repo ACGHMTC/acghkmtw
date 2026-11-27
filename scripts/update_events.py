@@ -17,10 +17,10 @@ HKT = timezone(timedelta(hours=8))
 
 # 1. Google News 關鍵字搜尋
 RSS_QUERIES = [
-    ("香港", "香港 (同人 OR Rainbow Gala OR RG OR 動漫節) -股價 -財報"),
+    ("香港", "香港 (同人 OR Rainbow Gala OR RG OR CON-CON OR COMIC CON OR 動漫節 OR ONLY OR Pure Love) -股價 -財報"),
     ("香港", "香港 (快閃店 OR 期間限定店 OR 展覽) (動漫 OR 遊戲) -股價 -財報"),
-    ("澳門", "澳門 (動漫 OR 遊戲 OR 同人 OR 漫展) -股價 -財報"),
-    ("台灣", "台灣 (CWT OR FF OR 開拓動漫祭 OR 漫博) -股價 -財報"),
+    ("澳門", "澳門 (動漫 OR 遊戲 OR 同人 OR 漫展 OR MCF OR LvUp ACG OR 澳門原創動漫作品展) -股價 -財報"),
+    ("台灣", "台灣 (CWT OR FF OR 開拓動漫祭 OR 漫博 OR 同人活動) -股價 -財報"),
     ("深圳", "深圳 (漫展 OR 動漫展 OR 遊戲展 OR 同人展) -股價 -財報"),
 ]
 
