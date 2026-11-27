@@ -16,16 +16,32 @@ CF_API_TOKEN = os.environ.get("CF_API_TOKEN", "").strip()
 DATA_PATH = "data/events.json"
 HKT = timezone(timedelta(hours=8))
 
+# 1. Google News 關鍵字搜尋（已整合你擴充的關鍵字）
 RSS_QUERIES = [
-("香港", "香港 (同人 OR Rainbow Gala OR RG OR CON-CON OR COMIC CON OR 動漫節 OR Pure Love) -股價 -財報"),
+    ("香港", "香港 (同人 OR Rainbow Gala OR RG OR CON-CON OR COMIC CON OR 動漫節 OR ONLY OR Pure Love) -股價 -財報"),
     ("香港", "香港 (快閃店 OR 期間限定店 OR 展覽) (動漫 OR 遊戲) -股價 -財報"),
     ("澳門", "澳門 (動漫 OR 遊戲 OR 同人 OR 漫展 OR MCF OR LvUp ACG OR 澳門原創動漫作品展) -股價 -財報"),
-    ("台灣", "台灣 (CWT OR FF OR 開拓動漫祭 OR 漫博 OR 同人活動) -股價 -財報"),
+    ("台灣", "台灣 (CWT OR FF OR 開拓動漫祭 OR 漫博 OR 台北國際動漫節 OR 同人活動) -股價 -財報"),
     ("深圳", "深圳 (漫展 OR 動漫展 OR 遊戲展 OR 同人展) -股價 -財報"),
 ]
 
+# 2. 專業 ACG 媒體 RSS
 DIRECT_RSS_FEEDS = [
     ("台灣", "https://gnn.gamer.com.tw/rss.xml?k=16"),
+]
+
+# 3. 每年固定舉辦的官方網站直連清單
+# 格式：(地區, 主辦/活動名稱, 官網網址, 預設分類, 是否直接抓取HTML)
+OFFICIAL_SITES = [
+    ("澳門", "LvUp ACG 澳門同人動漫節", "https://lvup-acg.com/", "綜合漫展", True),
+    ("澳門", "澳門同人節 MCF", "https://www.facebook.com/inMCF/", "同人即賣會", False),
+    ("香港", "Rainbow Gala", "https://www.rainbow-gala.com/", "同人即賣會", True),
+    ("香港", "動漫領域 AniTerritory", "https://aniterritory.weebly.com/", "同人即賣會", True),
+    ("香港", "香港動漫電玩節 ACGHK", "https://ani-com.hk/", "綜合漫展", True),
+    ("香港", "Palette Ring 創繪祭", "https://palette-ring.com/", "同人即賣會", True),
+    ("台灣", "台北國際動漫節 TICA", "https://www.ccpa.org.tw/tica/data.php?id=2403655&tpl=11", "綜合漫展", True),
+    ("台灣", "開拓動漫祭 Fancy Frontier", "https://www.f-2.com.tw/", "同人即賣會", True),
+    ("台灣", "CWT 台灣同人誌販售會", "https://www.comicworld.com.tw/", "同人即賣會", True),
 ]
 
 
@@ -93,7 +109,7 @@ class EventLinkParser(HTMLParser):
             raw_text = " ".join(self.current_link_text)
             clean_text = re.sub(r"\s+", " ", html_lib.unescape(raw_text)).strip()
             context_snippet = " | ".join(self.recent_texts[-5:])
-            if len(clean_text) >= 4:
+            if len(clean_text) >= 2:
                 self.candidates.append((self.current_href, clean_text, context_snippet))
             self.current_href = None
             self.current_link_text = []
@@ -122,7 +138,7 @@ class PageTextExtractor(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
         t = tag.lower()
-        if t in ("script", "style", "noscript", "svg", "nav", "footer", "header"):
+        if t in ("script", "style", "noscript", "svg"):
             self.skip = True
             return
         if t == "a":
@@ -132,7 +148,7 @@ class PageTextExtractor(HTMLParser):
                     self.ext_links.append(href)
 
     def handle_endtag(self, tag):
-        if tag.lower() in ("script", "style", "noscript", "svg", "nav", "footer", "header"):
+        if tag.lower() in ("script", "style", "noscript", "svg"):
             self.skip = False
 
     def handle_data(self, data):
@@ -169,15 +185,81 @@ def decode_html_bytes(raw: bytes) -> str:
 def fetch_detail_snippet(detail_url: str) -> str:
     """針對活動情報子頁面抓出完整內文與主辦官網連結"""
     try:
-        html_text = decode_html_bytes(fetch_url_bytes(detail_url, timeout=12))
+        html_text = decode_html_bytes(fetch_url_bytes(detail_url, timeout=14))
         ext = PageTextExtractor(detail_url)
         ext.feed(html_text)
-        body_text = " ".join(ext.texts)[:900]
+        body_text = " ".join(ext.texts)[:1300]
         unique_ext = list(dict.fromkeys(ext.ext_links))[:4]
         links_info = f"頁面外部連結：{', '.join(unique_ext)}" if unique_ext else ""
         return f"{body_text}\n{links_info}".strip()
     except Exception:
         return ""
+
+
+def parse_official_site(region_hint: str, org_name: str, site_url: str, default_cat: str, fetch_html: bool = True):
+    """直接解析年度固定官方網站的首頁與近期場次子頁面"""
+    if not fetch_html:
+        return []
+
+    items = []
+    try:
+        html_text = decode_html_bytes(fetch_url_bytes(site_url, timeout=20))
+        ext = PageTextExtractor(site_url)
+        ext.feed(html_text)
+        home_text = " ".join(ext.texts)[:1400]
+
+        parser = EventLinkParser(site_url)
+        parser.feed(html_text)
+        sub_pages = []
+        base_netloc = urllib.parse.urlparse(site_url).netloc
+
+        sub_keywords = (
+            "act", "event", "main", "info", "news", "schedule", "ticket", "data.php",
+            "台北", "台中", "高雄", "香港", "澳門", "rg", "cwt", "ff", "tica", "場次", "活動", "最新", "參展"
+        )
+        for link, text, _ in parser.candidates:
+            parsed_link = urllib.parse.urlparse(link)
+            if parsed_link.netloc == base_netloc and link != site_url:
+                if any(k in text.lower() or k in link.lower() for k in sub_keywords):
+                    if link not in sub_pages:
+                        sub_pages.append(link)
+            if len(sub_pages) >= 4:
+                break
+
+        items.append(
+            {
+                "region_hint": region_hint,
+                "source": f"{org_name}官網",
+                "title": f"{org_name} 官方最新場次公告",
+                "link": site_url,
+                "pub_date": datetime.now(HKT).strftime("%Y-%m-%d"),
+                "desc": f"此為【{org_name}】官方網站直接抓取內容（請依此官網公告為最高準則）：{home_text}",
+                "fetch_detail": False,
+                "force_official_url": site_url,
+                "default_category": default_cat,
+                "is_official": True,
+            }
+        )
+
+        for sub_url in sub_pages:
+            items.append(
+                {
+                    "region_hint": region_hint,
+                    "source": f"{org_name}官網",
+                    "title": f"{org_name} 場次詳情頁",
+                    "link": sub_url,
+                    "pub_date": datetime.now(HKT).strftime("%Y-%m-%d"),
+                    "desc": f"此為【{org_name}】官方網站場次子頁面",
+                    "fetch_detail": True,
+                    "force_official_url": sub_url,
+                    "default_category": default_cat,
+                    "is_official": True,
+                }
+            )
+        print(f"[Official OK] {org_name}: 擷取主頁 + {len(sub_pages)} 個場次子頁面")
+    except Exception as e:
+        print(f"[Official Warn] {org_name} ({site_url}): {e}")
+    return items
 
 
 def parse_web_events(region_hint: str, source_name: str, url: str, limit: int = 12):
@@ -196,7 +278,7 @@ def parse_web_events(region_hint: str, source_name: str, url: str, limit: int = 
         )
         seen_local = set()
         for link, text, context in parser.candidates:
-            if link == url or link in seen_local:
+            if link == url or link in seen_local or len(text) < 4:
                 continue
             if any(w.lower() == text.lower() for w in ignore_words) or len(text) > 160:
                 continue
@@ -212,6 +294,7 @@ def parse_web_events(region_hint: str, source_name: str, url: str, limit: int = 
                     "pub_date": datetime.now(HKT).strftime("%Y-%m-%d"),
                     "desc": f"來源網站：{source_name}｜連結文字：{text}｜周邊資訊：{context[:200]}",
                     "fetch_detail": True,
+                    "is_official": False,
                 }
             )
             if len(items) >= limit:
@@ -244,6 +327,7 @@ def parse_rss_url(url: str, region_hint: str, source_name: str = "RSS", limit: i
                         "pub_date": pub_date,
                         "desc": clean_desc,
                         "fetch_detail": False,
+                        "is_official": False,
                     }
                 )
     except Exception as e:
@@ -270,21 +354,21 @@ def call_cloudflare_ai(prompt: str) -> str:
                 "role": "system",
                 "content": (
                     "你是香港、澳門、台灣、深圳動漫、遊戲、同人與ACG文化活動情報整理助手。"
-                    "請根據提供的『實際網頁內容』整理活動資訊，絕對不可憑空猜測或捏造年份與場館；若內文沒有寫明日期，start_date 請留空字串。"
+                    "請嚴格根據提供的『實際網頁內容』整理活動資訊，絕對不可憑空猜測或捏造年份與場館；若內文沒有寫明日期，start_date 請留空字串。"
                     "若為日本/歐美活動、純網站導覽按鈕、一般美食/賽車/宗教活動或純線上新聞，請只回覆 null。"
                     "若是明確的四地線下ACG活動，請只輸出一個合法 JSON 物件（所有欄位的值都必須是純字串，tags 為字串陣列）："
                     '{"region":"香港|澳門|台灣|深圳",'
                     '"category":"同人即賣會|綜合漫展|遊戲與快閃",'
-                    '"title":"活動名稱（繁體中文）",'
+                    '"title":"活動名稱（含屆數與場次，繁體中文）",'
                     '"start_date":"YYYY-MM-DD（必須依據內文，無則留空）",'
                     '"end_date":"YYYY-MM-DD",'
                     '"venue":"完整場館名稱與詳細地址（盡量保留樓層與街號）",'
                     '"official_url":"若內文有出現主辦單位官方網址（非新聞網站/非AniHK/非DoujinArk）請填入，否則留空字串",'
-                    '"deadline_note":"重要提醒、入場費或售票資訊",'
+                    '"deadline_note":"重要提醒、社團報名截止日、入場費或售票資訊",'
                     '"tags":["標籤1","標籤2"]}'
                 ),
             },
-            {"role": "user", "content": str(prompt)[:1600]},
+            {"role": "user", "content": str(prompt)[:1800]},
         ],
         "max_tokens": 500,
         "temperature": 0.1,
@@ -374,34 +458,63 @@ def is_valid_official_url(url: str, source_link: str) -> bool:
     u = to_clean_str(url)
     if not u.startswith("http"):
         return False
-    # 排除新聞媒體與情報聚合站本身，確保 official_url 真的是主辦單位官網
     aggregator_domains = ("hk01.com", "anihk.com", "doujinark.hk", "happymacao.com", "news.google.com", "gnn.gamer.com.tw")
     if any(d in u.lower() for d in aggregator_domains):
         return False
     return u != source_link
 
 
-def merge_event_details(existing_ev: dict, parsed: dict, source_name: str, link: str):
+def infer_official_from_known_sites(region: str, title: str) -> str:
+    """若新聞或第三方網站提到已知年度活動，自動補上對應官方網站"""
+    t = to_clean_str(title).lower()
+    mapping = [
+        ("澳門", ("mcf", "澳門同人節"), "https://www.facebook.com/inMCF/"),
+        ("澳門", ("lvup",), "https://lvup-acg.com/"),
+        ("香港", ("rainbow gala", "rg3"), "https://www.rainbow-gala.com/"),
+        ("香港", ("動漫領域", "aniterritory"), "https://aniterritory.weebly.com/"),
+        ("香港", ("動漫電玩節", "acghk"), "https://ani-com.hk/"),
+        ("香港", ("palette ring", "創繪祭"), "https://palette-ring.com/"),
+        ("台灣", ("台北國際動漫節", "tica"), "https://www.ccpa.org.tw/tica/data.php?id=2403655&tpl=11"),
+        ("台灣", ("開拓動漫祭", "fancy frontier", "ff4"), "https://www.f-2.com.tw/"),
+        ("台灣", ("cwt", "台灣同人誌販售會"), "https://www.comicworld.com.tw/"),
+    ]
+    for r, keywords, url in mapping:
+        if region == r and any(k in t for k in keywords):
+            return url
+    return ""
+
+
+def merge_event_details(
+    existing_ev: dict,
+    parsed: dict,
+    source_name: str,
+    link: str,
+    is_official: bool = False,
+    forced_official: str = "",
+):
     updated = False
 
     new_start = to_clean_str(parsed.get("start_date"))
     new_end = to_clean_str(parsed.get("end_date")) or new_start
-    if new_start and existing_ev.get("start_date") in ("", "近期公布"):
-        existing_ev["start_date"] = new_start
-        existing_ev["end_date"] = new_end or new_start
-        updated = True
+    # 若為官方網站來源，直接信任官網最新日期並覆蓋；若為一般來源，僅在原本無日期時補上
+    if new_start and (is_official or existing_ev.get("start_date") in ("", "近期公布")):
+        if existing_ev.get("start_date") != new_start or existing_ev.get("end_date") != new_end:
+            existing_ev["start_date"] = new_start
+            existing_ev["end_date"] = new_end or new_start
+            updated = True
 
     new_venue = to_clean_str(parsed.get("venue"))
     old_venue = to_clean_str(existing_ev.get("venue"))
-    # 若新來源的地址更詳細（字數較長且包含具體場館），自動更新為更詳細的地址
-    if new_venue and (old_venue in ("", existing_ev.get("region")) or len(new_venue) > len(old_venue) + 4):
-        existing_ev["venue"] = new_venue
-        updated = True
+    if new_venue and (is_official or old_venue in ("", existing_ev.get("region")) or len(new_venue) > len(old_venue) + 4):
+        if existing_ev.get("venue") != new_venue:
+            existing_ev["venue"] = new_venue
+            updated = True
 
-    new_official = to_clean_str(parsed.get("official_url"))
-    if is_valid_official_url(new_official, link) and not existing_ev.get("official_url"):
-        existing_ev["official_url"] = new_official
-        updated = True
+    candidate_official = forced_official or to_clean_str(parsed.get("official_url"))
+    if candidate_official and (is_official or (is_valid_official_url(candidate_official, link) and not existing_ev.get("official_url"))):
+        if existing_ev.get("official_url") != candidate_official:
+            existing_ev["official_url"] = candidate_official
+            updated = True
 
     new_note = to_clean_str(parsed.get("deadline_note"))
     old_note = to_clean_str(existing_ev.get("deadline_note"))
@@ -438,6 +551,10 @@ def main():
     seen_urls = {e.get("url", "") for e in existing_events}
 
     raw_items = []
+    # 最優先抓取你指定的年度固定官方網站
+    for region_hint, org_name, site_url, default_cat, fetch_html in OFFICIAL_SITES:
+        raw_items.extend(parse_official_site(region_hint, org_name, site_url, default_cat, fetch_html))
+
     for region_hint, source_name, web_url in get_web_sources():
         raw_items.extend(parse_web_events(region_hint, source_name, web_url, limit=12))
 
@@ -451,7 +568,9 @@ def main():
     merged_count = 0
 
     for item in raw_items:
-        if item["link"] in seen_urls:
+        is_official = bool(item.get("is_official"))
+        # 官網每次都重新檢查最新場次公告；非官網若已抓過則跳過
+        if not is_official and item["link"] in seen_urls:
             continue
 
         detail_text = ""
@@ -460,7 +579,7 @@ def main():
 
         prompt = (
             f"地區參考：{item['region_hint']}\n"
-            f"情報來源：{item.get('source', '')}\n"
+            f"情報來源：{item.get('source', '')}（{'官方網站' if is_official else '情報/新聞'}）\n"
             f"列表標題：{item['title']}\n"
             f"摘要：{item.get('desc', '')}\n"
             f"詳情頁內文：\n{detail_text}\n"
@@ -483,24 +602,34 @@ def main():
         region = raw_region if raw_region in {"香港", "澳門", "台灣", "深圳"} else item["region_hint"]
 
         raw_cat = to_clean_str(parsed.get("category"))
-        category = raw_cat if raw_cat in {"同人即賣會", "綜合漫展", "遊戲與快閃"} else "遊戲與快閃"
+        default_cat = item.get("default_category") or "遊戲與快閃"
+        category = raw_cat if raw_cat in {"同人即賣會", "綜合漫展", "遊戲與快閃"} else default_cat
 
         clean_title = to_clean_str(parsed.get("title"))
         start_date = to_clean_str(parsed.get("start_date"))
         end_date = to_clean_str(parsed.get("end_date")) or start_date
         venue = to_clean_str(parsed.get("venue")) or region
         deadline_note = to_clean_str(parsed.get("deadline_note"))
-        raw_official = to_clean_str(parsed.get("official_url"))
-        official_url = raw_official if is_valid_official_url(raw_official, item["link"]) else ""
+
+        forced_official = item.get("force_official_url", "")
+        raw_official = forced_official or to_clean_str(parsed.get("official_url")) or infer_official_from_known_sites(region, clean_title)
+        official_url = raw_official if (forced_official or is_valid_official_url(raw_official, item["link"])) else ""
 
         raw_tags = parsed.get("tags")
         tags = [to_clean_str(t) for t in raw_tags if to_clean_str(t)] if isinstance(raw_tags, list) else [region]
 
         matched_ev = find_matching_event(existing_events, region, clean_title, start_date)
         if matched_ev:
-            if merge_event_details(matched_ev, parsed, item.get("source", ""), item["link"]):
+            if merge_event_details(
+                matched_ev,
+                parsed,
+                item.get("source", ""),
+                item["link"],
+                is_official=is_official,
+                forced_official=official_url,
+            ):
                 merged_count += 1
-                print(f"[Merged] [{region}] {matched_ev['title']} ← 補充自 {item.get('source')}")
+                print(f"[Merged] [{region}] {matched_ev['title']} ← 更新自 {item.get('source')}")
             seen_urls.add(item["link"])
             time.sleep(1.0)
             continue
