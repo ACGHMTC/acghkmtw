@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-27 19:37 HKT",
+  "last_updated": "2026-11-27 22:12 HKT",
   "events": [
     {
       "id": "hk-rg-2026",
@@ -85,6 +85,25 @@
         "GoogleNews"
       ],
       "url": "https://news.google.com/rss/articles/CBMihgJBVV95cUxOVmdKYXJ6akJ1MFN3V2lfR0ZTUDFLSDJaTGt4eHFIVDZOVFdFSmw1ZjlZWEVMUlJnNWJTX3l5M3Q3RDJjYmlyYkZtZWg5MzZUUldvMGFFanNqWEtGZ1pSc1UwNkNRdnJaRGdKX0xwWjMyZ0tfQnp6LXJDUWdLS3RhVjRZWW43U1J4dlNLTFpoSDhDUWpGYWV3YWROZGVRQ1R4UEVFVDVjeGYyQkJBTV8wZGQ4Q182YXNhY3dmaE43dXhicFl2dk9XSVhOb1U3NU8xeW9jUEZSNktHTFo0azVHTHA0VG1lcW9DbVhIMS1PMm1UNzhEdVdwTHFqNmlCVk5aOExJYXNn?oc=5"
+    },
+    {
+      "id": "auto-1795788652-0",
+      "region": "台灣",
+      "category": "綜合漫展",
+      "title": "CWT 74 台北場",
+      "start_date": "2024-08-23",
+      "end_date": "2024-08-25",
+      "venue": "台北世貿一館",
+      "deadline_note": "門票售罄，現場購票不可購買",
+      "tags": [
+        "CWT",
+        "綜合漫展",
+        "台北"
+      ],
+      "verified_sources": [
+        "AniHK"
+      ],
+      "url": "https://anihk.com/events/cwt-74"
     }
   ]
 }
