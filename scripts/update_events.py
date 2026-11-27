@@ -250,4 +250,206 @@ def extract_json_object(text: str):
     cleaned = text.strip()
     if not cleaned or cleaned.lower() == "null":
         return None
-    cleaned = re.sub(r"^```(?:json)?\s*", "", cleaned, flags=re
+    cleaned = re.sub(r"^```(?:json)?\s*", "", cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r"\s*```$", "", cleaned)
+    match = re.search(r"\{.*\}", cleaned, flags=re.DOTALL)
+    if not match:
+        return None
+    try:
+        return json.loads(match.group(0))
+    except json.JSONDecodeError:
+        return None
+
+
+def normalize_title_key(title: str) -> str:
+    """標準化活動標題以便進行同地區交叉比對"""
+    t = title.lower()
+    # 移除括號內補充字眼如（範例資料）、[香港場]
+    t = re.sub(r"[\(（\[【].*?[\)）\]】]", "", t)
+    # 移除常見泛用後綴詞，保留核心品牌/活動名
+    for word in ("同人誌即賣會", "同人即賣會", "同人展", "動漫節", "快閃店", "期間限定店", "香港站", "台灣站", "澳門站"):
+        t = t.replace(word, "")
+    # 僅保留中英文與數字
+    t = re.sub(r"[^\w\u4e00-\u9fff]+", "", t)
+    return t
+
+
+def find_matching_event(existing_events: list, region: str, title: str, start_date: str):
+    """同地區交叉比對：檢查現有清單中是否已有同一活動"""
+    new_key = normalize_title_key(title)
+    if not new_key:
+        return None
+
+    for ev in existing_events:
+        if ev.get("region") != region:
+            continue
+        old_key = normalize_title_key(ev.get("title", ""))
+        if not old_key:
+            continue
+
+        # 規則 1：核心名稱完全一致或高度包含（長度至少 4 個字元）
+        if new_key == old_key:
+            return ev
+        if len(new_key) >= 4 and len(old_key) >= 4 and (new_key in old_key or old_key in new_key):
+            return ev
+
+        # 規則 2：同地區 + 起始日期相同 + 標題有明顯重疊（至少 3 個連續字元相同）
+        if (
+            start_date
+            and start_date != "近期公布"
+            and ev.get("start_date") == start_date
+            and len(new_key) >= 3
+            and len(old_key) >= 3
+        ):
+            for i in range(len(new_key) - 2):
+                if new_key[i : i + 3] in old_key:
+                    return ev
+    return None
+
+
+def merge_event_details(existing_ev: dict, parsed: dict, source_name: str, link: str):
+    """交叉比對命中後，用新來源補全舊資料缺漏的欄位"""
+    updated = False
+
+    new_start = (parsed.get("start_date") or "").strip()
+    new_end = (parsed.get("end_date") or new_start).strip()
+    if new_start and existing_ev.get("start_date") in ("", "近期公布"):
+        existing_ev["start_date"] = new_start
+        existing_ev["end_date"] = new_end or new_start
+        updated = True
+
+    new_venue = (parsed.get("venue") or "").strip()
+    if new_venue and existing_ev.get("venue") in ("", existing_ev.get("region")):
+        existing_ev["venue"] = new_venue
+        updated = True
+
+    new_note = (parsed.get("deadline_note") or "").strip()
+    old_note = (existing_ev.get("deadline_note") or "").strip()
+    if new_note and new_note not in old_note:
+        existing_ev["deadline_note"] = f"{old_note} / {new_note}".strip(" /")
+        updated = True
+
+    new_tags = parsed.get("tags") if isinstance(parsed.get("tags"), list) else []
+    old_tags = existing_ev.get("tags") if isinstance(existing_ev.get("tags"), list) else []
+    for tag in new_tags:
+        if tag and tag not in old_tags and len(old_tags) < 6:
+            old_tags.append(tag)
+            updated = True
+    existing_ev["tags"] = old_tags
+
+    # 紀錄已交叉驗證的來源（不影響前端顯示，方便追蹤資料可信度）
+    sources = existing_ev.get("verified_sources", [])
+    if source_name not in sources:
+        sources.append(source_name)
+        existing_ev["verified_sources"] = sources
+        updated = True
+
+    return updated
+
+
+def main():
+    if os.path.exists(DATA_PATH):
+        with open(DATA_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    else:
+        data = {"last_updated": "", "events": []}
+
+    existing_events = data.get("events", [])
+    seen_urls = {e.get("url", "") for e in existing_events}
+
+    raw_items = []
+    # 1. 抓取五個指定活動網站（含動態月份澳門旅遊局）
+    for region_hint, source_name, web_url in get_web_sources():
+        raw_items.extend(parse_web_events(region_hint, source_name, web_url, limit=8))
+
+    # 2. 抓取官方 RSS（巴哈姆特 GNN）
+    for region_hint, feed_url in DIRECT_RSS_FEEDS:
+        raw_items.extend(parse_rss_url(feed_url, region_hint, source_name="巴哈GNN", limit=8))
+
+    # 3. 抓取 Google News 關鍵字補充
+    for region_hint, query in RSS_QUERIES:
+        raw_items.extend(fetch_rss_items(region_hint, query, limit=3))
+
+    added_count = 0
+    merged_count = 0
+
+    for item in raw_items:
+        if item["link"] in seen_urls:
+            continue
+
+        prompt = (
+            f"地區參考：{item['region_hint']}\n"
+            f"情報來源：{item.get('source', '')}\n"
+            f"標題：{item['title']}\n"
+            f"摘要：{item.get('desc', '')}\n"
+            f"參考日期：{item['pub_date']}"
+        )
+        try:
+            raw_ai = call_cloudflare_ai(prompt)
+            parsed = extract_json_object(raw_ai)
+        except Exception as e:
+            print(f"[AI Warn] {item['title'][:30]}: {e}")
+            time.sleep(1.5)
+            continue
+
+        if not parsed or not parsed.get("title"):
+            seen_urls.add(item["link"])
+            time.sleep(1.2)
+            continue
+
+        region = (
+            parsed.get("region")
+            if parsed.get("region") in {"香港", "澳門", "台灣", "深圳"}
+            else item["region_hint"]
+        )
+        category = (
+            parsed.get("category")
+            if parsed.get("category") in {"同人即賣會", "綜合漫展", "遊戲與快閃"}
+            else "遊戲與快閃"
+        )
+        clean_title = parsed["title"].strip()
+        start_date = (parsed.get("start_date") or "").strip()
+        end_date = (parsed.get("end_date") or start_date).strip()
+
+        # 同地區交叉比對
+        matched_ev = find_matching_event(existing_events, region, clean_title, start_date)
+        if matched_ev:
+            if merge_event_details(matched_ev, parsed, item.get("source", ""), item["link"]):
+                merged_count += 1
+                print(f"[Merged] [{region}] {matched_ev['title']} ← 補充自 {item.get('source')}")
+            seen_urls.add(item["link"])
+            time.sleep(1.2)
+            continue
+
+        new_event = {
+            "id": f"auto-{int(time.time())}-{added_count}",
+            "region": region,
+            "category": category,
+            "title": clean_title,
+            "start_date": start_date or "近期公布",
+            "end_date": end_date or start_date or "近期公布",
+            "venue": (parsed.get("venue") or region).strip(),
+            "deadline_note": (parsed.get("deadline_note") or "").strip(),
+            "tags": parsed.get("tags") if isinstance(parsed.get("tags"), list) else [region],
+            "verified_sources": [item.get("source", "Web")],
+            "url": item["link"],
+        }
+
+        existing_events.append(new_event)
+        seen_urls.add(item["link"])
+        added_count += 1
+        print(f"[Added] [{region}] {new_event['title']} ({item.get('source')})")
+
+        time.sleep(1.5)
+
+    data["last_updated"] = datetime.now(HKT).strftime("%Y-%m-%d %H:%M HKT")
+    data["events"] = existing_events
+
+    with open(DATA_PATH, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
+    print(f"完成更新：新增 {added_count} 筆活動，交叉比對合併 {merged_count} 筆資料。")
+
+
+if __name__ == "__main__":
+    main()
