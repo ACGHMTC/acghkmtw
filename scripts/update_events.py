@@ -252,7 +252,17 @@ def call_cloudflare_ai(prompt: str) -> str:
     if isinstance(ai_out, dict):
         return (ai_out.get("response") or "").strip()
     return str(ai_out).strip()
-
+    
+def to_clean_str(val) -> str:
+    if val is None:
+        return ""
+    if isinstance(val, dict):
+        parts = [to_clean_str(v) for v in val.values() if v is not None]
+        return " ".join(p for p in parts if p).strip()
+    if isinstance(val, list):
+        parts = [to_clean_str(x) for x in val if x is not None]
+        return " ".join(p for p in parts if p).strip()
+    return str(val).strip()
 
 def extract_json_object(text: str):
     cleaned = text.strip()
@@ -268,6 +278,17 @@ def extract_json_object(text: str):
     except json.JSONDecodeError:
         return None
 
+def to_clean_str(val) -> str:
+    if val is None:
+        return ""
+    if isinstance(val, dict):
+        # 若是字典，優先把值串接起來，避免出現 {'...': '...'}
+        parts = [to_clean_str(v) for v in val.values() if v is not None]
+        return " ".join(p for p in parts if p).strip()
+    if isinstance(val, list):
+        parts = [to_clean_str(x) for x in val if x is not None]
+        return " ".join(p for p in parts if p).strip()
+    return str(val).strip()
 
 def normalize_title_key(title: str) -> str:
     """標準化活動標題以便進行同地區交叉比對"""
@@ -319,19 +340,19 @@ def merge_event_details(existing_ev: dict, parsed: dict, source_name: str, link:
     """交叉比對命中後，用新來源補全舊資料缺漏的欄位"""
     updated = False
 
-    new_start = (parsed.get("start_date") or "").strip()
+    new_start = to_clean_str(parsed.get("start_date"))
     new_end = (parsed.get("end_date") or new_start).strip()
     if new_start and existing_ev.get("start_date") in ("", "近期公布"):
         existing_ev["start_date"] = new_start
         existing_ev["end_date"] = new_end or new_start
         updated = True
 
-    new_venue = (parsed.get("venue") or "").strip()
+    new_venue = to_clean_str(parsed.get("venue"))
     if new_venue and existing_ev.get("venue") in ("", existing_ev.get("region")):
         existing_ev["venue"] = new_venue
         updated = True
 
-    new_note = (parsed.get("deadline_note") or "").strip()
+    new_note = to_clean_str(parsed.get("deadline_note"))
     old_note = (existing_ev.get("deadline_note") or "").strip()
     if new_note and new_note not in old_note:
         existing_ev["deadline_note"] = f"{old_note} / {new_note}".strip(" /")
@@ -415,9 +436,9 @@ def main():
             if parsed.get("category") in {"同人即賣會", "綜合漫展", "遊戲與快閃"}
             else "遊戲與快閃"
         )
-        clean_title = parsed["title"].strip()
-        start_date = (parsed.get("start_date") or "").strip()
-        end_date = (parsed.get("end_date") or start_date).strip()
+        clean_title = to_clean_str(parsed.get("title"))
+        start_date = to_clean_str(parsed.get("start_date"))
+        end_date = to_clean_str(parsed.get("end_date")) or start_date
 
         # 同地區交叉比對
         matched_ev = find_matching_event(existing_events, region, clean_title, start_date)
