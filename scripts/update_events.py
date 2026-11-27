@@ -204,21 +204,21 @@ def call_cloudflare_ai(prompt: str) -> str:
             {
                 "role": "system",
                 "content": (
-                    "你是香港、澳門、台灣、深圳動漫、遊戲、同人與ACG文化活動情報整理助手。"
-                    "請判斷輸入資訊是否為明確的『香港、澳門、台灣或深圳』線下活動、漫展、同人場、遊戲活動、IP快閃店或大型流行文化展覽。"
-                    "若為日本/歐美活動、純網頁導覽按鈕、純線上新聞或資訊過於模糊，請只回覆 null。"
-                    "若是明確的四地線下活動，請只輸出一個合法 JSON 物件（不要 markdown 包裹，不要多餘解釋），欄位如下："
+                    "你是香港、澳門、台灣、深圳動漫、遊戲與同人活動情報整理助手。"
+                    "請判斷輸入是否為明確的『香港、澳門、台灣或深圳』線下活動、漫展、同人場、遊戲活動或快閃店。"
+                    "若為日本/歐美活動、純線上活動或導覽按鈕，請只回覆 null。"
+                    "若是明確的四地線下活動，請只輸出合法 JSON 物件，不要 markdown 包裹："
                     '{"region":"香港|澳門|台灣|深圳",'
                     '"category":"同人即賣會|綜合漫展|遊戲與快閃",'
-                    '"title":"乾淨的活動名稱（繁體中文，去掉多餘年份前綴或網站名）",'
-                    '"start_date":"YYYY-MM-DD（若無明確日期請留空字串）",'
+                    '"title":"活動名稱（繁體中文）",'
+                    '"start_date":"YYYY-MM-DD",'
                     '"end_date":"YYYY-MM-DD",'
                     '"venue":"場地或地區",'
-                    '"deadline_note":"重要提醒、售票或報名資訊",'
+                    '"deadline_note":"重要提醒或售票資訊",'
                     '"tags":["標籤1","標籤2"]}'
                 ),
             },
-            {"role": "user", "content": prompt},
+            {"role": "user", "content": str(prompt)[:1000]},
         ],
         "max_tokens": 400,
         "temperature": 0.15,
@@ -226,7 +226,7 @@ def call_cloudflare_ai(prompt: str) -> str:
 
     req = urllib.request.Request(
         endpoint,
-        data=json.dumps(payload).encode("utf-8"),
+        data=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
         headers={
             "Authorization": f"Bearer {CF_API_TOKEN}",
             "Content-Type": "application/json",
@@ -234,8 +234,12 @@ def call_cloudflare_ai(prompt: str) -> str:
         method="POST",
     )
 
-    with urllib.request.urlopen(req, timeout=30) as resp:
-        result = json.loads(resp.read().decode("utf-8"))
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            result = json.loads(resp.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        err_body = e.read().decode("utf-8", errors="ignore")
+        raise RuntimeError(f"HTTP {e.code}: {err_body[:250]}")
 
     if not result.get("success"):
         raise RuntimeError(f"Cloudflare AI API 失敗: {result}")
