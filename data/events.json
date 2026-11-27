@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-27 18:28 HKT",
+  "last_updated": "2026-11-27 19:37 HKT",
   "events": [
     {
       "id": "hk-rg-2026",
@@ -64,6 +64,27 @@
         "週末好去處"
       ],
       "url": "https://www.macautower.com.mo/"
+    },
+    {
+      "id": "auto-1795779402-0",
+      "region": "香港",
+      "category": "綜合漫展",
+      "title": "葬送的芙莉蓮特香港展",
+      "start_date": "2026-11-25",
+      "end_date": "2026-11-25",
+      "venue": "旺角",
+      "deadline_note": "無",
+      "tags": [
+        "葬送的芙莉蓮特",
+        "欣梅爾像",
+        "鏡蓮華",
+        "寶箱怪",
+        "實體化"
+      ],
+      "verified_sources": [
+        "GoogleNews"
+      ],
+      "url": "https://news.google.com/rss/articles/CBMihgJBVV95cUxOVmdKYXJ6akJ1MFN3V2lfR0ZTUDFLSDJaTGt4eHFIVDZOVFdFSmw1ZjlZWEVMUlJnNWJTX3l5M3Q3RDJjYmlyYkZtZWg5MzZUUldvMGFFanNqWEtGZ1pSc1UwNkNRdnJaRGdKX0xwWjMyZ0tfQnp6LXJDUWdLS3RhVjRZWW43U1J4dlNLTFpoSDhDUWpGYWV3YWROZGVRQ1R4UEVFVDVjeGYyQkJBTV8wZGQ4Q182YXNhY3dmaE43dXhicFl2dk9XSVhOb1U3NU8xeW9jUEZSNktHTFo0azVHTHA0VG1lcW9DbVhIMS1PMm1UNzhEdVdwTHFqNmlCVk5aOExJYXNn?oc=5"
     }
   ]
 }
