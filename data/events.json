@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-27 23:01 HKT",
+  "last_updated": "2026-11-28 02:03 HKT",
   "events": [
     {
       "id": "hk-rg-2026",
@@ -94,11 +94,12 @@
       "start_date": "2026-12-12",
       "end_date": "2026-12-13",
       "venue": "台北市大安區羅斯福路四段1號, 國立臺灣大學綜合體育館1F&3F&4F",
-      "deadline_note": "",
+      "deadline_note": "一般入場10:30，16:10停止入場；時間流程可能按現場情況調整。",
       "tags": [
         "CWT",
         "綜合漫展",
-        "台北"
+        "台北",
+        "同人展"
       ],
       "verified_sources": [
         "AniHK"
@@ -190,6 +191,71 @@
       ],
       "official_url": "",
       "url": "https://news.google.com/rss/articles/CBMiigNBVV95cUxNRVA4bV9RdmF4azRSZFFBM0xIZF91TUZwOXFJbzVBbHNaWkZES0pRcEZTcDk4U1VfTGdQTWhOemhrTDJUaUpZNGh1ZHBMZUtObjhUSDZzc3VibGhZZG9VQkhFWVJRenJzTFJvVWgzUUxiaV9qS2plbmNqTUQxQTdPNG1UbU9zcWh0V1o4dU9iTmtOTkU3OHM3M1pSR1lQVVFEMjV6SEMtZThxWFNkTlQwQnVFNUluaUVydjRpRGtPV091X0t1SHYtM2tXb2RaSzM2SDJnOHc5c0RhVTMxbE1Xb3YwbER2eWppZ3c2SDY4OXVfWDlTdWFwV3V4VnJ5eEhjb2ZHMUEyTWx2TXNxLTNRWEh0ODh0ZF9JRDk0T1NkalE5R0w1VENTVjdTTncyUHVIYWhBT1hpcWNkT0NHcms0RDdQQThyd1NBM1hiS1Fubl9wWnB6UXVLeUt3YXV6Qy05MFN2TE92Vmt6ZXZvb0liT3FndmRXQzZkSUlWNnExMWFjMEJrSUcxV3R3?oc=5"
+    },
+    {
+      "id": "auto-1795802406-0",
+      "region": "香港",
+      "category": "綜合漫展",
+      "title": "動漫領域 AniTerritory",
+      "start_date": "近期公布",
+      "end_date": "2026-11-28",
+      "venue": "未知",
+      "deadline_note": "參展組織的報到和準備時間是 10:00am-12:00nn。 只需其中一名成員報到即可，報到時 必須 出示附有攤位編號的報到電郵。",
+      "tags": [
+        "動漫領域 AniTerritory",
+        "AT05",
+        "漫展",
+        "香港"
+      ],
+      "verified_sources": [
+        "動漫領域 AniTerritory官網"
+      ],
+      "official_url": "https://aniterritory.weebly.com/at05-21443236372343221063.html",
+      "url": "https://aniterritory.weebly.com/at05-21443236372343221063.html"
+    },
+    {
+      "id": "auto-1795802462-1",
+      "region": "台灣",
+      "category": "綜合漫展",
+      "title": "開拓動漫祭 Fancy Frontier",
+      "start_date": "近期公布",
+      "end_date": "近期公布",
+      "venue": "台灣",
+      "deadline_note": "社團報名相關資訊請參考官網",
+      "tags": [
+        "開拓動漫祭",
+        "Fancy Frontier",
+        "同人誌販售",
+        "Cosplayer",
+        "動漫創作",
+        "漫畫界"
+      ],
+      "verified_sources": [
+        "開拓動漫祭 Fancy Frontier官網"
+      ],
+      "official_url": "https://www.f-2.com.tw/sample-page-2/",
+      "url": "https://www.f-2.com.tw/sample-page-2/"
+    },
+    {
+      "id": "auto-1795802511-2",
+      "region": "香港",
+      "category": "遊戲與快閃",
+      "title": "凝夢祭 Dreamer Fiesta SP 02",
+      "start_date": "近期公布",
+      "end_date": "2026-11-29",
+      "venue": "THE ANGLE L1中庭（觀塘巧明街98號）",
+      "deadline_note": "活動免費入場，場地位於L1，Cosplay區及主題場景位於L8、L9。",
+      "tags": [
+        "凝夢祭",
+        "Dreamer Fiesta",
+        "同人展",
+        "Cosplay"
+      ],
+      "verified_sources": [
+        "AniHK"
+      ],
+      "official_url": "",
+      "url": "https://anihk.com/events/dreamer-fiesta-sp-02"
     }
   ]
 }
