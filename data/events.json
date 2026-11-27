@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-27 22:12 HKT",
+  "last_updated": "2026-11-27 23:01 HKT",
   "events": [
     {
       "id": "hk-rg-2026",
@@ -104,6 +104,92 @@
         "AniHK"
       ],
       "official_url": "[https://www.comicworld.com.tw/](https://www.comicworld.com.tw/)"
+    },
+    {
+      "id": "auto-1795791563-0",
+      "region": "香港",
+      "category": "同人即賣會",
+      "title": "2026-27 FGO跨年討伐戰 (FGO主題跨年活動)",
+      "start_date": "近期公布",
+      "end_date": "2026-12-31",
+      "venue": "入選後郵件通知",
+      "deadline_note": "",
+      "tags": [
+        "FGO",
+        "跨年活動",
+        "同人誌",
+        "周邊"
+      ],
+      "verified_sources": [
+        "DoujinArk"
+      ],
+      "official_url": "",
+      "url": "https://doujinark.hk/event/info/459"
+    },
+    {
+      "id": "auto-1795791574-1",
+      "region": "香港",
+      "category": "同人即賣會",
+      "title": "Palette Ring 12",
+      "start_date": "近期公布",
+      "end_date": "2027-03-06",
+      "venue": "啟德雙子匯一期 TT SITE",
+      "deadline_note": "",
+      "tags": [
+        "Palette Ring",
+        "啟德雙子匯",
+        "同人誌",
+        "周邊"
+      ],
+      "verified_sources": [
+        "DoujinArk"
+      ],
+      "official_url": "",
+      "url": "https://doujinark.hk/event/info/462"
+    },
+    {
+      "id": "auto-1795791600-2",
+      "region": "香港",
+      "category": "綜合漫展",
+      "title": "Sub Culture Xpo 04",
+      "start_date": "近期公布",
+      "end_date": "2026-11-29",
+      "venue": "香港科學園 12W 大樓 GRAND HALL",
+      "deadline_note": "票價 HK$60 普通 / HK$120 VIP",
+      "tags": [
+        "Sub Culture Xpo",
+        "綜合漫展",
+        "同人展",
+        "Cosplay"
+      ],
+      "verified_sources": [
+        "AniHK"
+      ],
+      "official_url": "",
+      "url": "https://anihk.com/events/sub-culture-xpo-04"
+    },
+    {
+      "id": "auto-1795791707-3",
+      "region": "台灣",
+      "category": "綜合漫展",
+      "title": "2026開拓動漫祭FF47懶人包：票價、交通、現場管制和防暑全攻略",
+      "start_date": "近期公布",
+      "end_date": "近期公布",
+      "venue": "台北世貿一館",
+      "deadline_note": "票價、交通、現場管制和防暑全攻略",
+      "tags": [
+        "開拓動漫祭",
+        "FF47",
+        "票價",
+        "交通",
+        "現場管制",
+        "防暑"
+      ],
+      "verified_sources": [
+        "GoogleNews"
+      ],
+      "official_url": "",
+      "url": "https://news.google.com/rss/articles/CBMiigNBVV95cUxNRVA4bV9RdmF4azRSZFFBM0xIZF91TUZwOXFJbzVBbHNaWkZES0pRcEZTcDk4U1VfTGdQTWhOemhrTDJUaUpZNGh1ZHBMZUtObjhUSDZzc3VibGhZZG9VQkhFWVJRenJzTFJvVWgzUUxiaV9qS2plbmNqTUQxQTdPNG1UbU9zcWh0V1o4dU9iTmtOTkU3OHM3M1pSR1lQVVFEMjV6SEMtZThxWFNkTlQwQnVFNUluaUVydjRpRGtPV091X0t1SHYtM2tXb2RaSzM2SDJnOHc5c0RhVTMxbE1Xb3YwbER2eWppZ3c2SDY4OXVfWDlTdWFwV3V4VnJ5eEhjb2ZHMUEyTWx2TXNxLTNRWEh0ODh0ZF9JRDk0T1NkalE5R0w1VENTVjdTTncyUHVIYWhBT1hpcWNkT0NHcms0RDdQQThyd1NBM1hiS1Fubl9wWnB6UXVLeUt3YXV6Qy05MFN2TE92Vmt6ZXZvb0liT3FndmRXQzZkSUlWNnExMWFjMEJrSUcxV3R3?oc=5"
     }
   ]
 }
