@@ -105,10 +105,23 @@
               </div>
               <div class="flex flex-wrap gap-1.5 mb-4">${tagsHtml}</div>
             </div>
-            <a href="${ev.url}" target="_blank" rel="noopener noreferrer"
-              class="inline-block text-center w-full py-2 rounded-lg bg-slate-800 hover:bg-indigo-600 text-sm font-medium transition">
-              查看官方詳情 ↗
-            </a>
+      ${ev.official_url ? `
+              <div class="flex gap-2 mt-auto">
+                <a href="${ev.official_url}" target="_blank" rel="noopener noreferrer"
+                   class="flex-1 text-center py-2 px-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium transition">
+                  官方網站 ↗
+                </a>
+                <a href="${ev.url}" target="_blank" rel="noopener noreferrer"
+                   class="flex-1 text-center py-2 px-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-medium transition">
+                  查看詳情 ↗
+                </a>
+              </div>
+            ` : `
+              <a href="${ev.url}" target="_blank" rel="noopener noreferrer"
+                 class="inline-block text-center w-full py-2 rounded-lg bg-slate-800 hover:bg-indigo-600 text-sm font-medium transition mt-auto">
+                查看詳情 ↗
+              </a>
+            `}
           </article>
         `;
       }).join("");
