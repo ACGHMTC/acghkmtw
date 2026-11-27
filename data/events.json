@@ -69,10 +69,10 @@
       "id": "auto-1795779402-0",
       "region": "香港",
       "category": "綜合漫展",
-      "title": "葬送的芙莉蓮特香港展",
+      "title": "葬送的芙莉蓮香港特展",
       "start_date": "2026-11-25",
       "end_date": "2026-11-25",
-      "venue": "旺角",
+      "venue": "旺角創興廣場地庫 B2 INCUBASE Arena",
       "deadline_note": "無",
       "tags": [
         "葬送的芙莉蓮特",
@@ -91,10 +91,10 @@
       "region": "台灣",
       "category": "綜合漫展",
       "title": "CWT 74 台北場",
-      "start_date": "2024-08-23",
-      "end_date": "2024-08-25",
-      "venue": "台北世貿一館",
-      "deadline_note": "門票售罄，現場購票不可購買",
+      "start_date": "2026-12-12",
+      "end_date": "2026-12-13",
+      "venue": "台北市大安區羅斯福路四段1號, 國立臺灣大學綜合體育館1F&3F&4F",
+      "deadline_note": "",
       "tags": [
         "CWT",
         "綜合漫展",
@@ -103,7 +103,7 @@
       "verified_sources": [
         "AniHK"
       ],
-      "url": "https://anihk.com/events/cwt-74"
+      "official_url": "[https://www.comicworld.com.tw/](https://www.comicworld.com.tw/)"
     }
   ]
 }
