@@ -196,7 +196,10 @@ def call_cloudflare_ai(prompt: str) -> str:
     if not CF_ACCOUNT_ID or not CF_API_TOKEN:
         raise RuntimeError("缺少 CF_ACCOUNT_ID 或 CF_API_TOKEN 環境變數")
 
-    model = "@cf/qwen/qwen2.5-7b-instruct"
+    # 改成目前可用的模型
+    model = "@cf/meta/llama-3.1-8b-instruct"   # ← 這裡改掉
+    # 或 model = "@cf/qwen/qwen2.5-coder-32b-instruct"
+
     endpoint = (
         f"https://api.cloudflare.com/client/v4/accounts/{CF_ACCOUNT_ID}/ai/run/{model}"
     )
