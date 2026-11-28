@@ -5,7 +5,7 @@
       "id": "hk-rg-2026",
       "region": "香港",
       "category": "同人即賣會",
-      "title": "Rainbow Gala 同人誌即賣會（範例資料）",
+      "title": "Rainbow Gala 同人誌即賣會",
       "start_date": "2026-12-20",
       "end_date": "2026-12-20",
       "venue": "亞洲國際博覽館 HALL3-8 Cosplay攝影場HALL2",
@@ -18,7 +18,7 @@
         "同人誌即賣會",
         "動漫文化"
       ],
-      "url": "https://www.doujinark.hk/",
+      "url": "",
       "official_url": "https://www.rainbow-gala.com/",
       "verified_sources": [
         "Rainbow Gala官網"
@@ -28,7 +28,7 @@
       "id": "sz-comic-2026",
       "region": "深圳",
       "category": "綜合漫展",
-      "title": "深圳國際電玩節暨動漫展（範例資料）",
+      "title": "深圳國際電玩節暨動漫展",
       "start_date": "2026-12-26",
       "end_date": "2026-12-27",
       "venue": "深圳會展中心（福田）",
@@ -38,13 +38,13 @@
         "福田口岸直達",
         "大型漫展"
       ],
-      "url": "https://show.bilibili.com/"
+      "url":"https://show.bilibili.com/platform/detail.html?id=1008008&from=pc_ticketlist"
     },
     {
       "id": "tw-cwt-2026",
       "region": "台灣",
       "category": "同人即賣會",
-      "title": "CWT 台灣同人誌販售會（範例資料）",
+      "title": "CWT 台灣同人誌販售會",
       "start_date": "2026-12-12",
       "end_date": "2026-12-13",
       "venue": "國立臺灣大學綜合體育館",
@@ -54,23 +54,23 @@
         "台北",
         "兩日場"
       ],
-      "url": "https://www.comicworld.com.tw/"
+      "official_url":"https://www.comicworld.com.tw/"
     },
     {
       "id": "mo-acg-2026",
       "region": "澳門",
-      "category": "遊戲與快閃",
-      "title": "澳門動漫遊戲嘉年華（範例資料）",
-      "start_date": "2026-12-19",
-      "end_date": "2026-12-20",
-      "venue": "澳門旅遊塔會展娛樂中心",
-      "deadline_note": "免費入場／部分舞台需預約",
+      "category": "遊戲",
+      "title": "澳門動漫遊戲節 LV.4",
+      "start_date": "2026-12-26",
+      "end_date": "2026-12-27",
+      "venue": "澳門科學館",
+      "deadline_note": "費用:MOP30",
       "tags": [
         "澳門",
         "遊戲試玩",
         "週末好去處"
       ],
-      "url": "https://www.macautower.com.mo/"
+      "url": "https://lvup-acg.com/"
     },
     {
       "id": "auto-1795779402-0",
