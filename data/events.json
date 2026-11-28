@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-28 08:46 HKT",
+  "last_updated": "2026-11-28 23:26 HKT",
   "events": [
     {
       "id": "hk-rg-2026",
@@ -38,7 +38,7 @@
         "福田口岸直達",
         "大型漫展"
       ],
-      "url":"https://show.bilibili.com/platform/detail.html?id=1008008&from=pc_ticketlist"
+      "url": "https://show.bilibili.com/platform/detail.html?id=1008008&from=pc_ticketlist"
     },
     {
       "id": "tw-cwt-2026",
@@ -54,7 +54,7 @@
         "台北",
         "兩日場"
       ],
-      "official_url":"https://www.comicworld.com.tw/"
+      "official_url": "https://www.comicworld.com.tw/"
     },
     {
       "id": "mo-acg-2026",
@@ -309,6 +309,52 @@
       ],
       "official_url": "https://www.ccpa.org.tw/tica/data.php?id=332588&tpl=11",
       "url": "https://www.ccpa.org.tw/tica/data.php?id=332588&tpl=11"
+    },
+    {
+      "id": "auto-1795879346-0",
+      "region": "香港",
+      "category": "綜合漫展",
+      "title": "第二十七屆香港動漫電玩節",
+      "start_date": "近期公布",
+      "end_date": "近期公布",
+      "venue": "香港會議展覽中心",
+      "deadline_note": "傳媒採訪證預先登記, 參展商專區, 入場資訊, 關於 ACGHK, 聯絡我們, 歷屆 ACG 回顧",
+      "tags": [
+        "香港動漫電玩節",
+        "ACGHK",
+        "漫展",
+        "動漫",
+        "電玩",
+        "Cosplay"
+      ],
+      "verified_sources": [
+        "香港動漫電玩節 ACGHK官網"
+      ],
+      "official_url": "https://ani-com.hk/2022ver/activities/#S1",
+      "url": "https://ani-com.hk/activities/"
+    },
+    {
+      "id": "auto-1795879369-1",
+      "region": "台灣",
+      "category": "綜合漫展",
+      "title": "台北國際動漫節 TICA",
+      "start_date": "近期公布",
+      "end_date": "近期公布",
+      "venue": "台北市松江路131號5樓502A室",
+      "deadline_note": "活動場次、內容規劃及攝影、拍照等相關事宜，以各家出版社公告為準，不便之處敬請見諒！",
+      "tags": [
+        "台北國際動漫節",
+        "TICA",
+        "動漫節",
+        "簽名會",
+        "漫畫家",
+        "聲優"
+      ],
+      "verified_sources": [
+        "台北國際動漫節 TICA官網"
+      ],
+      "official_url": "https://www.ccpa.org.tw/tica/data.php?id=2403656&tpl=11",
+      "url": "https://www.ccpa.org.tw/tica/data.php?id=2403656&tpl=11"
     }
   ]
 }
