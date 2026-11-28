@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-28 02:03 HKT",
+  "last_updated": "2026-11-28 08:46 HKT",
   "events": [
     {
       "id": "hk-rg-2026",
@@ -8,14 +8,21 @@
       "title": "Rainbow Gala 同人誌即賣會（範例資料）",
       "start_date": "2026-12-20",
       "end_date": "2026-12-20",
-      "venue": "亞洲國際博覽館",
-      "deadline_note": "預售門票熱賣中",
+      "venue": "亞洲國際博覽館 HALL3-8 Cosplay攝影場HALL2",
+      "deadline_note": "預售門票熱賣中 / 請參考官網公告",
       "tags": [
         "同人誌",
         "Cosplay",
-        "可現場購票"
+        "可現場購票",
+        "Rainbow Gala",
+        "同人誌即賣會",
+        "動漫文化"
       ],
-      "url": "https://www.doujinark.hk/"
+      "url": "https://www.doujinark.hk/",
+      "official_url": "https://www.rainbow-gala.com/",
+      "verified_sources": [
+        "Rainbow Gala官網"
+      ]
     },
     {
       "id": "sz-comic-2026",
@@ -244,18 +251,64 @@
       "start_date": "近期公布",
       "end_date": "2026-11-29",
       "venue": "THE ANGLE L1中庭（觀塘巧明街98號）",
-      "deadline_note": "活動免費入場，場地位於L1，Cosplay區及主題場景位於L8、L9。",
+      "deadline_note": "活動免費入場，場地位於L1，Cosplay區及主題場景位於L8、L9。 / 免費入場, 市集及舞台位於 L1, Cosplay 區及主題場景位於 L8、L9。",
       "tags": [
         "凝夢祭",
         "Dreamer Fiesta",
         "同人展",
-        "Cosplay"
+        "Cosplay",
+        "Dreamer Fiesta SP 02"
       ],
       "verified_sources": [
         "AniHK"
       ],
       "official_url": "",
       "url": "https://anihk.com/events/dreamer-fiesta-sp-02"
+    },
+    {
+      "id": "auto-1795826608-0",
+      "region": "香港",
+      "category": "綜合漫展",
+      "title": "第五屆《Ani-Territory 動漫祭》 (AT05)",
+      "start_date": "近期公布",
+      "end_date": "2027-02-14",
+      "venue": "合和大禮堂, 合和酒店16F, 香港灣仔堅尼地道15號",
+      "deadline_note": "截止報名日期：2026年12月18日23:59",
+      "tags": [
+        "Ani-Territory",
+        "動漫祭",
+        "AT05",
+        "漫展",
+        "香港"
+      ],
+      "verified_sources": [
+        "動漫領域 AniTerritory官網"
+      ],
+      "official_url": "https://aniterritory.weebly.com/",
+      "url": "https://aniterritory.weebly.com/"
+    },
+    {
+      "id": "auto-1795826657-1",
+      "region": "台灣",
+      "category": "綜合漫展",
+      "title": "第15屆台北國際動漫節",
+      "start_date": "近期公布",
+      "end_date": "2027-02-01",
+      "venue": "台北世貿一館",
+      "deadline_note": "本屆動漫盛會，將為粉絲們帶來最精采的活動、最多元豐富的展出內容，不僅有國內外名師簽名會與偶像見面會，各式周邊商品、首發書、套書、福袋、玩具、模型、滿額贈…等，琳瑯滿目的吸睛商品都是粉絲們的期待！",
+      "tags": [
+        "台北國際動漫節",
+        "TICA",
+        "第15屆",
+        "漫展",
+        "動漫節",
+        "台北"
+      ],
+      "verified_sources": [
+        "台北國際動漫節 TICA官網"
+      ],
+      "official_url": "https://www.ccpa.org.tw/tica/data.php?id=332588&tpl=11",
+      "url": "https://www.ccpa.org.tw/tica/data.php?id=332588&tpl=11"
     }
   ]
 }
