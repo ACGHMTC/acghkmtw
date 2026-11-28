@@ -68,6 +68,7 @@ def get_web_sources():
         ("香港", "DoujinArk", "https://doujinark.hk/event"),
         ("香港", "AniHK", "https://anihk.com/events/region/hk"),
         ("台灣", "AniHK", "https://anihk.com/events/region/tw"),
+        ("深圳", "bilibili", "https://show.bilibili.com/platform/home.html"),
         ("澳門", "HappyMacao", "https://event.happymacao.com/cms62/e/action/ListInfo/?classid=76"),
         ("澳門", "澳門旅遊局", f"https://www.macaotourism.gov.mo/zh-hant/events/whatson?month={ym_curr}"),
     ]
